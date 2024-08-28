@@ -1,0 +1,110 @@
+<project name="ops-parser-lib" basedir="../../../">
+
+<property name="root.dir" location=".."/>
+<property file="src/main/resources/build.properties" />
+
+<target name="compileCpp" depends="compileLexYacc, gencat" description="This is used to compile ops-parser-lib directory">
+
+	<echo>Compiling cpp files...</echo>
+        <mkdir dir="${target.dir}" />
+        <taskdef classpath="${common.tasks}" resource="cpptasks.tasks" />
+        <cc name="${CC}" warnings="none" debug="no" multithreaded="yes" outtype="${link}" outfile="${outfile}" objdir="${target.dir}">
+
+            <fileset dir="src/main/cpp/common" includes="*.C" />
+            <fileset dir="src/main/cpp/subsc" includes="*.C" />
+            <fileset dir="src/main/cpp/ttcb" includes="*.cc" />
+            <fileset dir="src/main/cpp/route" includes="*.C" />
+            <fileset dir="src/main/cpp/sched" includes="*.C" />
+            <fileset dir="src/main/cpp/cmd" includes="*.C" />
+
+            <includepath location="src/main/cpp/cmd" />
+            <includepath location="src/main/cpp/common" />
+            <includepath location="src/main/cpp/route" />
+            <!-- ops-enm-parser module dependency -->
+	    <includepath location="${root.dir}/ops-enm-parser/src/main/cpp/parse" />
+	    <includepath location="${root.dir}/ops-enm-parser/src/main/cpp/cri" />
+            <includepath location="src/main/cpp/subsc" />
+            <includepath location="src/main/cpp/ttcb" />
+            <includepath location="src/main/cpp/sched" />
+
+            <!-- Compiler Arguments -->
+            <compilerarg location="start" value="-g" />
+            <compilerarg location="start" value="-fcompare-debug-second" />
+            <compilerarg location="start" value="-D_RWCONFIG=12dgmsd" />
+            <compilerarg location="start" value="-std=c++0x" />
+            <compilerarg location="start" value="-std=gnu++0x" />
+            <compilerarg location="start" value="-m64" />
+            <compilerarg location="start" value="-W" />
+            <compilerarg location="start" value="-pthread" />
+            <compilerarg location="start" value="-Wno-long-long" />
+            <compilerarg location="start" value="-Wall" />
+            <compilerarg location="start" value="-msse3" />
+            <compilerarg location="start" value="-O0" />
+            <compilerarg location="start" value="-xc++" />
+            <compilerarg location="start" value="-DBOOST_LOG_DYN_LINK" />
+            <!-- compilerarg location="start" value="-Dgtest_disable_pthreads=OFF" /> -->
+
+            <!-- 3pp dependencies -->
+            <includepath location="${sourcepro.path}" />
+            <includepath location="${vbroker.include.dir}" />
+            <includepath location="${vbroker.lib.dir}" />
+            <includepath location="${grpc.include.dir}" />
+            <includepath location="${grpc.src.dir}" />
+            <includepath location="${parser.logs.include.dir}"/>
+
+            <defineset>
+                <define name="_REENTRANT" value="" />
+                <define name="TPF" value="400" />
+                <define name="THREAD" value="" />
+                <define name="PTHREAD" value=""/>
+                <define name="BITS64" value=""/>
+                <define name="_GNU_SOURCE" value=""/>
+            </defineset>
+        </cc>
+
+</target>
+
+<target name="compileLexYacc" description="This is used to compile lex and yacc files">
+
+        <mkdir dir="${project.build.directory}/ll" />
+
+        <exec executable="${flex.bin}" output="${project.build.directory}/ll/com_entry.lc" error="${project.build.directory}/ll/com_error.log">
+              <arg line="-t" />
+              <arg line="${com_entry_lex_yacc}/com_entry.ll" />
+        </exec>
+	    <exec executable="${flex.bin}" output="${project.build.directory}/ll/cti.lc" error="${project.build.directory}/ll/cti_error.log">
+	          <arg line="-t" />
+	          <arg line="${cti_lex_yacc}/cti.ll" />
+	    </exec>
+	
+        <mkdir dir="${project.build.directory}/yy" />
+      
+        <exec executable="${yacc.bin}" error="${project.build.directory}/yy/com_error.log">
+              <arg line="-d" />
+              <arg line="${com_entry_lex_yacc}/com_entry.yy" />
+        </exec>
+
+	    <move file="com_entry.tab.cc" tofile="${project.build.directory}/yy/com_entry.yc" />
+	    <delete file="com_entry.tab.hh" />
+
+	    <exec executable="${yacc.bin}" error="${project.build.directory}/yy/cti_error.log">
+	          <arg line="-d" />
+	          <arg line="${cti_lex_yacc}/cti.yy" />
+	    </exec>
+
+	    <move file="cti.tab.cc" tofile="${project.build.directory}/yy/cti.yc" />
+	    <delete file="cti.tab.hh" />
+
+</target>
+
+<target name="gencat">
+         <mkdir dir="${gencat.target}" />
+         <apply executable="${gencat.bin}" dest="${gencat.target}" parallel="false">
+               <targetfile />
+               <srcfile />
+               <fileset dir="${gencat.basedir}" includes="**/*.nls" />
+               <mapper type="glob" from="*.nls" to="*.cat" />
+         </apply>
+</target>
+
+</project>

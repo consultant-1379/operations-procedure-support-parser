@@ -1,0 +1,88 @@
+FROM armdocker.rnd.ericsson.se/proj_oss_releases/enm/eric-enm-os-builders/sles15/winfiol-ops-common-3pps:1.2.0-1-15sp5
+## Shared 3pps begins
+
+
+ENV LD_LIBRARY_PATH="/usr/local/lib:/usr/local/lib64:/usr/lib64/:${LD_LIBRARY_PATH}"
+
+ARG MAKE_JOBS=8
+
+RUN echo "Will use '-j ${MAKE_JOBS}' for 'make'"
+
+#RUN zypper addrepo -C -G -f "https://arm.sero.gic.ericsson.se/artifactory/proj-suse-repos-rpm-local/SLE15/SLE-15-SP2-Module-Public-Cloud?ssl_verify=no" repo-cloud && \
+ #   zypper addrepo -C -G -f "https://arm.sero.gic.ericsson.se/artifactory/proj-suse-repos-rpm-local/SLE15/SLE-15-SP2-Module-Public-Cloud-Updates?ssl_verify=no" repo-cloud-updates
+
+# libgrpc8 is available in SLE-15-SP2-Module-Public-Cloud, but no devel package.
+RUN zypper update -y && \
+    zypper install -y \
+        "autoconf" \
+        "automake" \
+        "libtool" \
+        "libicu-devel" \
+        "zlib-devel" \
+        "libnsl-devel-1.2.0-2.44" &&\
+    zypper clean --all
+
+RUN mkdir /tmp/lib && \
+    /usr/bin/cp -Lrv /usr/lib64/libboost_* /tmp/lib && \
+    /usr/bin/cp -Lrv /usr/lib64/libprotobuf.so* /tmp/lib && \
+    /usr/bin/cp -Lrv /usr/lib64/libcrypto.* /tmp/lib && \
+    /usr/bin/cp -Lrv /usr/lib64/libssl.* /tmp/lib && \
+    /usr/bin/cp -Lrv /usr/local/lib/libgrpc* /tmp/lib && \
+    /usr/bin/cp -Lrv /usr/local/lib/libgpr.so* /tmp/lib && \
+    /usr/bin/cp -Lrv /usr/local/lib/libaddress_sorting* /tmp/lib && \
+    cd /tmp/lib/ && \
+    tar -czvf /tmp/lib.tar.gz ./ &&\
+    rm -rf /tmp/lib
+
+## Shared 3pps ends
+
+## OPS 3pps begins
+RUN zypper install -y \
+    flex \
+    bison \
+    valgrind
+
+## OPS 3pps ends
+
+## OPS build begins
+
+
+
+## OPS build ends
+
+#ENTRYPOINT [ "/bin/bash" ]
+
+## OPS Development Environment begins
+
+RUN zypper install -y \
+        "gdb" && \
+    zypper clean --all
+
+#RUN zypper install -y \
+ #   zypper clean --all && \
+ #   ssh-keygen -b 4096 -t rsa -f "/etc/ssh/ssh_host_rsa_key" -q -N "" && \
+ #   ssh-keygen -b 521 -t ecdsa -f "/etc/ssh/ssh_host_ecdsa_key" -q -N "" && \
+ #   ssh-keygen -b 4096 -t ed25519 -f "/etc/ssh/ssh_host_ed25519_key" -q -N ""
+
+RUN sed -i 's/Ostream/ostream/g' /usr/include/boost/phoenix/core/detail/expression.hpp
+
+COPY ops-parser-lib/lib/proto_sles/ /usr/local/include/proto/
+
+COPY ops-parser-lib/lib/12dgmsd.bsf /tmp/
+RUN cd "/tmp" && \
+    zypper install -y wget && \
+    zypper install -y gcc-c++ && \
+    wget https://arm1s11-eiffel004.eiffel.gic.ericsson.se:8443/nexus/service/local/repositories/thirdparty/content/com/ericsson/oss/itpf/3pp/SourcePro/2021/SourcePro-2021.tar.gz && \
+    tar -zxvf SourcePro-2021.tar.gz  && \
+    cd 2021/ && \
+    cp /tmp/12dgmsd.bsf . && \
+    ./rcb/bin/rcb build -buildspec 12dgmsd.bsf && \
+    ./makeall_12dgmsd clean && \
+    ./makeall_12dgmsd && \
+    mkdir RW2021_LIBS && \
+    /usr/bin/cp -Lrv lib/ RW2021_LIBS/ && \
+    /usr/bin/cp -Lrv rw/ RW2021_LIBS/ && \
+    /usr/bin/cp -Lrv RW2021_LIBS/ /tmp/ && \
+    cd "/"
+
+## OPS Development Environment ends

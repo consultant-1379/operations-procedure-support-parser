@@ -1,0 +1,323 @@
+$ RCS revision handling
+$ $Id: OZT_RunTime.nls,v 21.0 1996/08/23 12:42:11 ehsgrap Rel $
+
+$ **********************************************************************
+
+$ NAME 
+$     %File_name:%
+
+$ COPYRIGHT
+$     COPYRIGHT Ericsson Hewlett-Packard Telecommunications AB, Sweden 1994.
+$     All rights reserved.
+
+$     The Copyright to the computer program(s) herein is the
+$     property of Ericsson Hewlett-Packard Telecommunications AB,
+$     Sweden. The program(s) may be used and/or copied only with the
+$     written permission from Ericsson Hewlett-Packard
+$     Telecommunications AB or in accordance with the terms and
+$     conditions stipulated in the agreement/contract under which
+$     the program(s) have been supplied.
+
+$ DESCRIPTION
+$     This file contains error message texts for Ozterm
+
+$ AUTHOR
+$     1994-11-28 EPA/T/EN Nelson Cheng
+
+$ REVISION
+$	B_POINT
+$	1996-08-23
+
+$ CHANGES
+$     $Log: OZT_RunTime.nls,v $
+$     Revision 21.0  1996/08/23 12:42:11  ehsgrap
+$     Made release B_POINT, J Grape (EHSGRAP).
+
+$     Revision 20.0  1996/07/10 07:56:51  epadmt
+$     Made release EC8_OZ, David Terry epa.epadmt.
+
+$     Revision 19.0  1996/03/19 07:22:00  ehsjasa
+$     Made release POW_TB61, J Sandquist (ehsjasa).
+
+$     Revision 18.0  1996/03/01 12:20:44  ehsjasa
+$     Made release EC7_OZ, J Sandquist (ehsjasa).
+
+$     Revision 17.0  1996/01/17 12:01:12  ehsjasa
+$     Made release EC6_OZ, J Sandquist (ehsjasa).
+
+$     Revision 16.0  1996/01/08 18:56:46  ehsjasa
+$     Made release POW_TB41, J Sandquist (ehsjasa).
+
+$     Revision 15.0  1995/11/29 02:02:21  ehsgrap
+$     Made release TB53_OZ, J Grape (EHSGRAP).
+
+$      Revision 14.0  95/11/20  17:15:56  17:15:56  ehsjasa (Jan Sandquist VK/EHS/VE)
+$      Made release POW_TB3, J Sandquist (EHSJASA).
+ 
+$     Revision 13.1  1995/10/10 15:32:03  ehsjasa
+$     Compiles succesfully on Solaris 2.4.
+
+$     Revision 13.0  1995/10/07 12:00:45  ehsjasa
+$     Made release PRE_XM22, J Sandquist (EHSJASA).
+
+$     Revision 12.0  1995/09/22 14:08:22  cmcha
+$     Made release EC5_OZ, J Sandquist (EHSJASA).
+
+$      Revision 11.0  95/09/14  09:24:28  09:24:28  ehsjasa (Jan Sandquist VK/EHS/PXE)
+$      Made release EC4_OZ, J Sandquist (EHSJASA).
+
+$     Revision 10.0  1995/08/02 11:01:01  cmcha
+$     Made release EC3_OZ, J Sandquist (EHSJASA).
+
+$      Revision 9.1  95/07/05  14:35:46  14:35:46  epanyc (Nelson Cheng VK/EHS/PXE)
+$      messages changed
+
+$      Revision 9.0  1995/06/29  14:37:12  cmcha
+$      Made release EC2_OZ, J Grape (EHSGRAP).
+
+$      Revision 8.0  95/06/07  17:08:14  17:08:14  cmcha (*CHA conf. and dev. EHS/PXE)
+$      Made release TB5_2_OZ, J Grape (EHSGRAP).
+
+$      Revision 7.1  95/05/24  08:23:49  08:23:49  epanyc (Nelson Cheng VK/EHS/PXE)
+$      minor change to one of the message
+
+$      Revision 7.0  1995/04/16  12:15:40  cmcha
+$      Made release TB5_1_OZ, J Grape (EHSGRAP).
+
+$      Revision 6.1  95/04/10  15:02:57  15:02:57  epanyc (Nelson Cheng VK/EHS/PXE)
+$      startup messages added
+
+$      Revision 6.0  95/03/17  20:04:42  20:04:42  cmcha
+$      Made release TB51_OZ, ehscama.
+
+$      Revision 5.0  95/03/16  20:30:31  20:30:31  cmcha (*CHA conf. and dev. EHS/PXE)
+$      Made release TB5_OZ, ehscama.
+
+$      Revision 4.3  95/03/16  12:29:22  12:29:22  epanyc (Nelson Cheng VK/EHS/PXE)
+$      new error code added
+
+$      Revision 4.2  1995/03/09  09:00:30  epanyc
+$      new messages added
+
+$      Revision 4.1  1995/03/02  21:26:12  epanyc
+$      @prompt messages changed
+
+$      Revision 4.0  95/02/23  21:45:26  21:45:26  cmcha (*CHA conf. and dev. EHS/PXE)
+$      Made release TB4, J Grape (EHSGRAP).
+
+$      Revision 3.1  95/02/20  14:33:14  14:33:14  epanyc (Nelson Cheng VK/EHS/PXE)
+$      some messages are modified
+
+$      Revision 3.0  1995/02/06  20:57:01  cmcha
+$      Made release TB3, J Grape (EHSGRAP).
+
+$      Revision 1.6  95/02/06  15:45:13  15:45:13  epanyc (Nelson Cheng VK/EHS/PXE)
+$      ENTER becomes APPLY
+
+$      Revision 1.5  1995/01/31  10:34:28  epanyc
+$      new codes added
+
+$      Revision 1.4  1995/01/26  13:58:33  epanyc
+$      new codes added
+
+$      Revision 1.3  1995/01/25  13:13:55  epanyc
+$      new code added
+
+$      Revision 1.2  95/01/18  16:59:40  16:59:40  epanyc (Nelson Cheng VK/EHS/PXE)
+$      new messages added for runfile selector
+
+$      Revision 1.1  1995/01/17  12:47:32  epanyc
+$      Initial revision
+
+$ **********************************************************************
+
+$set 1
+
+$ OZT_NLS_TIME_TO_DELAY
+11 Time left for delay: 
+
+$ OZT_NLS_MINS
+12 mins
+
+$ OZT_NLS_SECS
+13 secs
+
+$ OZT_NLS_FILE_SELECTION
+21 File Selection
+
+$ OZT_NLS_DIRECTORY
+22 Directory :
+
+$ OZT_NLS_FILE
+23 File :
+
+$ OZT_NLS_SELECT
+24 Select
+
+$ OZT_NLS_CANCEL
+25 Cancel
+
+$ OZT_NLS_GOUPONE
+26 (Go up one level)
+
+$ OZT_NLS_SELECT_A_FILE
+27 Select a file :
+
+$ OZT_NLS_INPUT
+31 CH: Input
+
+$ OZT_NLS_ENTER
+32 Apply
+
+$ OZT_NLS_ENTER_PROMPT1
+33 Please enter a value
+
+$ OZT_NLS_ENTER_PROMPT2
+34 Press Apply to continue execution
+
+$ OZT_NLS_FILE_VIEWER
+41 CH: File Viewer - 
+
+$ OZT_NLS_IOW
+51 CH: Input Output Window
+
+$ OZT_NLS_CONTINUE_EXECUTION
+61 Continue Execution ?
+
+$ OZT_NLS_CONTINUE
+62 Continue
+
+$ OZT_NLS_STOP
+63 Stop
+
+$ OZT_NLS_STOP_N_QUIT
+64 Stop & quit
+
+$ OZT_NLS_ELB_TASK_ID_MISSING
+100 ELB task id missing, application stops
+
+$ OZT_NLS_THE_FILE
+101 The file
+
+$ OZT_NLS_CANNOT_BE_ACCESSED
+102 cannot be accessed
+
+$ OZT_NLS_FAIL_TO_INIT
+103 Fail to initialise the interpreter (probably CAP_IPC problems)
+
+$ OZT_NLS_FAIL_TO_EXECUTE
+104 Fail to execute
+
+$ OZT_NLS_CHA_ENV_ERROR
+105 CHA environment variables(CHA_CMDFILE, CHA_RESPONSE) error, application stops
+
+$ OZT_NLS_NO_SUCH_PRINTER
+106 No such printer:
+
+$ OZT_NLS_NO_TEXT
+107 No text selected
+
+$ OZT_NLS_STEP_CANT_INCLUDE
+108 Include command error: Max number of files reached.
+
+$ OZT_NLS_CANT_INCLUDE
+109 Run stopped: Cannot include file. Max number of files reached.
+
+$ OZT_NLS_FILE_OPEN_ERROR
+110 Cannot open file:
+
+$ OZT_NLS_CANNOT_SET_USER
+111 Cannot set user to:
+
+$ OZT_NLS_CANNOT_CD
+112 Cannot change to directory
+
+$ OZT_NLS_OUT_OF_MEMORY
+113 Out of Memory, application stops
+
+$ OZT_NLS_NO_FILE_LOADED
+114 No file loaded
+
+$ OZT_NLS_MAX_FILES
+115 Maximum number of files reached, cannot set tags/breakpoints on file:
+
+$ OZT_NLS_SESSION_READ_ERROR
+116 Cannot read the session id from the file 
+
+$ OZT_WRONG_USER
+117 Tried to overtake session with other user
+
+$ OZT_NO_PERM_CLIENTCHANGE
+118 Not permitted to overtake session from current client
+
+$ OZT_IS_DISCONNECTED
+119 Other client has taken control over this session
+
+$ OZT_IS_CONNECTED
+120 Is active again
+
+$ OZT_INCORRECT_PWD
+121 Password not correct
+
+$ OZT_NLS_INITIALISING
+201 Initialising...
+
+$ OZT_NLS_CHECKING_ELB_AUTH
+202 Checking ELB authority...
+
+$ OZT_NLS_INITIALISING_USER_INTERFACE
+203 Initialising user interface...
+
+$ OZT_NLS_CONNECTING
+204 Connecting to external system...
+
+$ OZT_NLS_INITIALISING_CAP_IPC
+205 Initialising CAP-IPC...
+
+$ OZT_NLS_CMD_SENDER INITIALISED
+206 Command sender initialised...
+
+$ OZT_NLS_INTERPRETER_INITIALISED
+207 Interpreter initialised...
+
+$ OZT_NLS_STEP_IN_PROGRESS
+301 Step in progress...
+
+$ OZT_NLS_STEP_INTERRUPTED
+302 Step: Interrupted
+
+$ OZT_NLS_STEP
+303 Step:
+
+$ OZT_NLS_RUNNING_FROM_TOP
+304 Running from top of file...
+
+$ OZT_NLS_RUNNING_TAGS
+305 Running tags...
+
+$ OZT_NLS_NO_TAGS
+306 Can't run tags: No Tags
+
+$ OZT_NLS_RUNNING
+307 Running...
+
+$ OZT_NLS_RUN_STOP_BREAKPOINT
+308 Run stopped: Breakpoint
+
+$ OZT_NLS_RUN_STOP_BREAKPOINT
+309 Run stopped: Interrupted
+
+$ OZT_NLS_RUN_STOP_BREAKPOINT
+310 Run stopped:
+
+$ OZT_NLS_NOT_UPTODATE
+311 has been changed by another editor\nReload it?
+
+$ OZT_NLS_INCLUDED_LINES_EXECUTED
+312 Included command lines have been executed
+
+$ OZT_NLS_NO_CHA_DIRECTORIES
+313 ~/cha/cmdfile or ~/cha/response does not exist
+
+$ OZT_NLS_APCONNECT
+314 AP commands are sent to side:

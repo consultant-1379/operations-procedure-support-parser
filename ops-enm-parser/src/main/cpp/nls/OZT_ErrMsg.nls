@@ -1,0 +1,285 @@
+$ RCS revision handling
+$ **********************************************************************
+
+$     COPYRIGHT Ericsson 2018
+$     All rights reserved.
+
+$     The copyright to the computer program(s) herein is the property of
+$     Ericsson Inc. The programs may be used and/or copied only with written
+$     permission from Ericsson Inc. or in accordance with the terms and
+$     written permission from Ericsson Hewlett-Packard
+$     conditions stipulated in the agreement/contract under which the
+$     program(s) have been supplied.
+
+$set 1
+
+$ UNDEFINED
+1 Undefined Error Code
+
+$ NO_PROBLEM
+2 Successful
+
+$ SYNTAX_ERR
+3 Syntax Error
+
+$ INVALID_VALUE
+4 Invalid Parameter
+
+$ DIVISION_BY_ZERO
+5 Division By Zero
+
+$ VAR
+6 Variable
+
+$ Undefined
+7 Undefined
+
+$ INVALID_LINE_NO
+8 Invalid Line Number
+
+$ HIT_EOF
+9 Hit End Of File
+
+$ LABEL
+10 Label
+
+$ NOT_FOUND
+11 Not Found
+
+$ RETURN_WITHOUT_GOSUB
+12 Return Without Gosub
+
+$ NO_MATCHING_NEXT
+13 No Matching @NEXT Statement
+
+$ NEXT_WITHOUT_MATCHING_FOR
+14 Next Without Matching @FOR Statement
+
+$ FILE_OPEN_ERR
+15 File Open Error
+
+$ INTERNAL_ERR
+16 Internal Error
+
+$ NOT_IMPLEMENTED
+17 Not Implemented
+
+$ FILE_NOT_LOADED
+18 File Not Loaded
+
+$ CYCLIC_INCLUDE_ERR
+19 Cyclic Include Error
+
+$ MEM_ALLOC_ERR
+20 Memory Allocation Error
+
+$ PROGRAM_TERMINATED
+21 Normal Program Termination
+
+$ QUIT
+22 Quit
+
+$ PAUSE
+23 Program Paused
+
+$ STOP
+24 Program Stopped
+
+$ FILE_HALTED
+25 File Halted
+
+$ NO_FILE_LOADED
+26 No File Loaded
+
+$ INVALID_LABEL
+27 Invalid Label Name Found in
+
+$ DUPLICATE_LABELS
+28 Duplicated Label
+
+$ FAILED
+29 Failed
+
+$ BUSY
+30 Busy
+
+$ NO_CONNECTION
+31 No Connection
+
+$ INTERRUPTED
+32 User Interrupted
+
+$ NO_EXECUTABLE_CODE
+33 No Executable Code in
+
+$ PROGRAM_MODIFIED
+34 Program Modified
+
+$ NO_UI_SUPPORTED
+35 No User Interface Supported
+
+$ INHIBIT
+36 Confirmation Inhibited
+
+$ CONFIRM_FAIL
+37 Confirmation Failed
+
+$ TIME_EXPIRED
+38 Time Out
+
+$ CONNECTION_LOST
+39 Connection Lost
+
+$ NOT_ACCEPTED
+40 Not Accepted
+
+$ PARTLY_EXECUTED
+41 Partly Executed
+
+$ INCOMPLETE_COMMAND
+42 Incomplete Command
+
+$ FUNBUSY
+43 Function Busy
+
+$ REPLY_CHECK_FAIL
+45 Reply Check Failed
+
+$ MISSING_PARAMETER
+46 Missing Parameter(s)
+
+$ EXECUTE_ERR
+47 External Program Execution Error
+
+$ PATH_IS_DIR
+48 The path is a directory
+
+$ FILE_OP_ERR
+49 File operation failed
+
+$ ES_FAILED_DISCON
+50 Disconnection failed
+
+$ ES_NOREACH
+51 External system not reachable
+
+$ ES_UNKNOWN
+52 Unknown external system
+
+$ ES_IS_EXCLUSIVE
+53 External system is in exclusive use
+
+$ ES_NOAUTH
+54 Not authorized to connect to external system
+
+$ ES_FAILED_CON
+55 Unable to connect to external system
+
+$ NOT_AUTHORIZED
+56 Not authorized to send the command
+
+$ SEND_FAILED
+57 Failed to send the command
+
+$ CENTRALDIR_NOT_DEFINED
+58 Central directory is not defined
+
+$ PRIVATEDIR_NOT_DEFINED
+59 Private directory doesn't exist (default: ~/cha/cmdfile)
+
+$ SAVEDIR_NOT_DEFINED
+60 Save directory doesn't exist (default: ~/cha/response)
+
+$ ELSE_WITHOUT_IF
+61 No preceding @IF-THEN or @IFERROR-THEN statement
+
+$ ITERATED_ON_SAME_VAR
+62 Nested for-loop on the same variable
+
+$ PRINTER_LIST_UPDATE_ERR
+63 Printer list update error
+
+$ NO_SUCH_PRINTER
+64 Invalid printer
+
+$ DF_READING_ERR
+65 Fail to find the disk space left
+
+$ FILE_LOGGING_ERR
+66 File logging error
+
+$ DISPLAY_NOT_AVAILABLE
+67 X display not available
+
+$ ENDIF_WITHOUT_IF
+68 No Matching @IF Statement
+
+$ NO_MATCHING_ENDIF
+69 No Matching @ENDIF Statement
+
+$ COMMAND_NOT_SUPPORTED_AS_MENTRY
+70 Command not supported in the Manual Entry window
+
+$ MAIL_SENDING_FAILED
+71 Can't send the mail; check the address
+
+$ MAIL_FILE_NOT_FOUND
+72 Can't open the file to be sent
+
+$ BREAK_WITHOUT_FOR
+73 No Matching @FOR statement
+
+$ DIALOG_TIMEOUT
+74 Dialog timeout
+
+$ NO_MATCHING_ENDSWITCH
+75 No matching @ENDSWITCH command
+
+$ CASE_WITHOUT_MATCHING_SWITCH
+76 @CASE without matching @SWITCH
+
+$ DEFAULT_WITHOUT_MATCHING_SWITCH
+77 @DEFAULT without matching @SWITCH
+
+$ ENDSWITCH_WITHOUT_MATCHING_SWITCH
+78 @DENDSWITCH without matching @SWITCH
+
+$ MAA_NOT_REACHABLE
+79 MAA is not reachable
+
+$ DELAY_RESPONSE_NOT_RECEIVED
+80 Delayed response not received
+
+$ INVALID_CHILD_SESSION_ID
+81 Invalid child session ID
+
+$ VARIABLE_NOT_SUBSCRIBED
+82 Child session variable not subscribed
+
+$ CHILD_NOT_SUPPORTED
+83 A child script may not create or access other child scripts
+
+$ INVALID_NEID
+84 NEID of ES is not valid
+
+$ INVALID_SESSIONID
+85 WinFIOL Session ID is invalid
+
+$ INVALID_ENMUID
+86 ENMUID is invalid
+
+$ COULD_NOT_CONNECT_TO_ES
+87 Could not establish connection with ES
+
+$ SIDE_INCORRECT
+88 Side not defined
+
+$ CP_INCORRECT
+89 Illegal CP
+
+$ NOT_ALLOWED_SIDE
+90 Side not allowed
+
+$ VALUE_UNREASONABLE
+91 Unreasonable Value
+

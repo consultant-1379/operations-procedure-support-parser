@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.ericsson.oss.services</groupId>
+		<artifactId>operations-procedure-support-parser</artifactId>
+		<version>1.15.1-SNAPSHOT</version>
+		<relativePath>../</relativePath>
+	</parent>
+
+	<artifactId>ops-enm-parser</artifactId>
+	<name>[${project.artifactId}] module</name>
+
+	<properties>
+		<media.category>scripting</media.category>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>ant-contrib</groupId>
+			<artifactId>cpptasks</artifactId>
+			<version>20030309.134440</version>
+		</dependency>
+		<dependency>
+			<groupId>com.ericsson.oss.services</groupId>
+			<artifactId>ops-server-corba</artifactId>
+			<version>1.39.1</version>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>local_build</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>copy-jars</id>
+								<phase>validate</phase>
+								<goals>
+									<goal>copy-dependencies</goal>
+								</goals>
+								<configuration>
+									<includeArtifactIds>cpptasks</includeArtifactIds>
+									<outputDirectory>${project.build.directory}/lib</outputDirectory>
+									<overwrite>true</overwrite>
+								</configuration>
+							</execution>
+							<!-- This plugin is used to unpack ops_server bundle -->
+							<execution>
+								<id>unpack-ops-server</id>
+								<phase>validate</phase>
+								<goals>
+									<goal>unpack-dependencies</goal>
+								</goals>
+								<configuration>
+									<includeTypes>jar</includeTypes>
+									<includeArtifactIds>ops-server-corba</includeArtifactIds>
+									<outputDirectory>${project.build.directory}/ops_server</outputDirectory>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+
+					<!-- This plugin is used to compile cpp files -->
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.7</version>
+						<inherited>false</inherited>
+						<executions>
+							<execution>
+								<id>compileCpp</id>
+								<phase>generate-sources</phase>
+								<configuration>
+									<target>
+										<ant antfile="src/main/resources/build.xml" target="packageCpp" />
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>gTest</id>
+								<phase>generate-sources</phase>
+								<configuration>
+									<target>
+										<exec executable="make" failonerror="true" dir="../ops-parser-lib/unit_test/make" />
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.2.1</version>
+						<executions>
+							<execution>
+								<phase>test</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<executable>chmod</executable>
+							<arguments>
+								<argument>777</argument>
+								<argument>../ops-parser-lib/unit_test/make/test_shell.sh</argument>
+							</arguments>
+							<executable>../ops-parser-lib/unit_test/make/test_shell.sh</executable>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+	<build>
+                <pluginManagement>
+                        <plugins>
+                                <!-- to avoid deploying this parent pom.xml to nexus -->
+                                <plugin>
+                                        <groupId>org.apache.maven.plugins</groupId>
+                                        <artifactId>maven-deploy-plugin</artifactId>
+                                        <configuration>
+                                                <skip>true</skip>
+                                        </configuration>
+                                        <inherited>false</inherited>
+                                <!--    <version>${deploy.plugin.version}</version> -->
+                                </plugin>
+
+                                <!-- configure required plugins for all stages of the build -->
+                                <plugin>
+                                        <artifactId>exec-maven-plugin</artifactId>
+                                        <groupId>org.codehaus.mojo</groupId>
+                                        <!-- <version>${exec.plugin.version}</version> -->
+                                </plugin>
+                                <plugin>
+                                        <groupId>org.codehaus.mojo</groupId>
+                                        <artifactId>rpm-maven-plugin</artifactId>
+                                        <!-- <version>${rpm.plugin.version}</version> -->
+                                </plugin>
+                        </plugins>
+                </pluginManagement>
+        </build>
+
+</project>

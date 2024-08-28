@@ -1,0 +1,111 @@
+FROM armdocker.rnd.ericsson.se/proj_oss_releases/enm/eric-enm-os-builders/rhel7/winfiol-ops-common-3pps-gcc11:1.1.0-9-rhel79
+
+## Shared 3pps begins
+# 3pp versions are selected so that they match SLES15.
+# The exception is dependencies for the 3pps themselves, e.g. zlib-devel.
+
+ARG MAKE_JOBS=8
+
+RUN echo "Will use '-j ${MAKE_JOBS}' for 'make'"
+
+RUN mkdir -p "/usr/local/src"
+
+# Install packages required for multiple 3pps
+RUN yum -y install wget \
+    "make" \
+    "python-devel" \
+    "zlib-devel" \
+    "libicu" \
+    "libicu-devel" \
+    "autoconf" \
+    "automake" \
+    "libtool" \
+    "devtoolset-11-gdb" \
+    "devtoolset-11-gdb-gdbserver" \
+    "rh-python38-python" \
+    "rh-python38-python-debug" \
+    "rh-python38-python-devel" \
+    "gcc-c++" \
+    "openssh-server" && \
+    yum clean all
+
+
+# Install boost
+# For some reason b2 will fail to copy all the headers to $prefix/include, so try to fix that
+# manually in multiple ugly steps.
+#RUN yum -y install \
+#    "libicu" \
+#    "libicu-devel" && \
+#    yum clean all
+
+#RUN yum -y install \
+#    "autoconf" \
+#    "automake" \
+#    "libtool" && \
+#    yum clean all
+
+
+ENV LD_LIBRARY_PATH="/usr/local/lib:/usr/local/lib64:${LD_LIBRARY_PATH}"
+
+## Shared 3pps ends
+
+## OPS 3pps starts
+
+## OPS 3pps ends
+
+## OPS Development Environment begins
+
+# RUN yum -y install \
+#     "devtoolset-11-gdb" \
+#     "devtoolset-11-gdb-gdbserver" \
+#     "rh-python38-python" \
+#     "rh-python38-python-debug" \
+#     "rh-python38-python-devel" && \
+#     yum clean all
+
+
+RUN ssh-keygen -b 4096 -t rsa -f "/etc/ssh/ssh_host_rsa_key" -q -N "" && \
+    ssh-keygen -b 521 -t ecdsa -f "/etc/ssh/ssh_host_ecdsa_key" -q -N "" && \
+    ssh-keygen -b 4096 -t ed25519 -f "/etc/ssh/ssh_host_ed25519_key" -q -N ""
+
+# RUN yum -y install \
+#     openssh-server && \
+#     yum clean all && \# 
+#     ssh-keygen -b 4096 -t rsa -f "/etc/ssh/ssh_host_rsa_key" -q -N "" && \
+#     ssh-keygen -b 521 -t ecdsa -f "/etc/ssh/ssh_host_ecdsa_key" -q -N "" && \
+#     ssh-keygen -b 4096 -t ed25519 -f "/etc/ssh/ssh_host_ed25519_key" -q -N ""
+
+COPY ops-parser-lib/lib/proto/ /usr/local/include/proto/
+
+RUN mkdir /tmp/lib && \
+    /usr/bin/cp -Lrv /usr/local/lib/libboost_* /tmp/lib && \
+    /usr/bin/cp -Lrv /usr/local/lib/libprotobuf.so* /tmp/lib && \
+    /usr/bin/cp -Lrv /usr/local/lib/libgrpc* /tmp/lib && \
+    /usr/bin/cp -Lrv /usr/local/lib/libgpr.so* /tmp/lib && \
+    /usr/bin/cp -Lrv /usr/local/lib/libaddress_sorting* /tmp/lib && \
+    /usr/bin/cp -Lrv /usr/local/lib64/libcrypto.* /tmp/lib && \
+    /usr/bin/cp -Lrv /usr/local/lib64/libssl.* /tmp/lib && \
+    cd /tmp/lib/ && \
+    tar -czvf /tmp/lib.tar.gz ./ &&\
+    rm -rf /tmp/lib
+
+RUN sed -i 's/Ostream/ostream/g' /usr/local/include/boost/phoenix/core/detail/expression.hpp
+
+COPY ops-parser-lib/lib/12dgmsd.bsf /tmp/
+RUN source scl_source enable devtoolset-11 rh-python38 && \
+    cd "/tmp" && \
+    wget https://arm1s11-eiffel004.eiffel.gic.ericsson.se:8443/nexus/service/local/repositories/thirdparty/content/com/ericsson/oss/itpf/3pp/SourcePro/2021/SourcePro-2021.tar.gz && \
+    tar -zxvf SourcePro-2021.tar.gz  && \
+    cd 2021/ && \
+    cp /tmp/12dgmsd.bsf . && \
+    ./rcb/bin/rcb build -buildspec 12dgmsd.bsf && \
+    ./makeall_12dgmsd clean && \
+    ./makeall_12dgmsd && \
+    mkdir RW2021_LIBS && \
+    /usr/bin/cp -Lrv lib/ RW2021_LIBS/ && \
+    /usr/bin/cp -Lrv rw/ RW2021_LIBS/ && \
+    /usr/bin/cp -Lrv RW2021_LIBS/ /tmp/ && \
+    rm -rf /tmp/SourcePro-2021.tar.gz && \
+    cd "/"
+
+## OPS Development Environment ends

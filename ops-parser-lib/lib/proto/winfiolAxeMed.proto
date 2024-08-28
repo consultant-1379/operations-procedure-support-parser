@@ -1,0 +1,77 @@
+syntax = "proto3";
+package winfiolAxeMed;
+
+service WinFIOLAxeMediation {
+    rpc CreateSession (SessionRequest) returns (SessionResponse) {}
+    rpc CreateAsyncSession (SessionRequest) returns (stream StreamMessage) {}
+    rpc Connect (ConnectRequest) returns (GenericResponse) {}
+    rpc SendCommand (CommandRequest) returns (CommandResponse){}
+    rpc ConnectionStatus (GenericRequest) returns (GenericResponse) {}
+    rpc TerminateSession(GenericRequest) returns (GenericResponse) {}
+    rpc ControlNeTerminal(TerminalActionRequest) returns (GenericResponse) {}
+}
+
+message SessionRequest {
+    string clientName = 1;
+    string enmUserId = 2;
+}
+message SessionResponse {
+    string sessionId = 1;
+}
+
+message ConnectRequest {
+    string sessionId = 1; 
+    string neId = 2;
+    enum ApNodeSide {
+        CLUSTER = 0;
+        NODE_A = 1;
+        NODE_B = 2;
+    }
+    ApNodeSide nodeSide = 3;
+//temporary solution
+    string username = 4;
+    string password = 5;
+    enum ApNode {
+        AP1 = 0;
+        AP2 = 1;
+    }
+    ApNode node = 6;
+}
+
+message CommandRequest {
+    string sessionId = 1;
+    string cmdInput = 2;
+    string cmdType = 3;
+    string cpName = 4;
+}
+
+message CommandResponse {
+    string cmdOutput = 1;
+}
+
+message StreamMessage {
+    string sessionId = 1;
+    enum MessageType {
+        CONTROL = 0;
+        CMD_OUTPUT = 1;
+    }
+    MessageType type = 2;
+    string message = 3;
+}
+
+message TerminalActionRequest {
+    string sessionId = 1;
+    enum TerminalAction {
+        RELEASE = 0;
+        CONNECT = 1;
+    }
+    TerminalAction action = 2;
+}
+
+message GenericRequest {
+    string sessionId = 1;
+}
+message GenericResponse {
+    int32 status = 1;	
+}
+

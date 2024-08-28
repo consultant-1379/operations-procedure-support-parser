@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<!--Please Use the latest version of integration pom.xml or the one you 
+		want to reference to -->
+	<parent>
+		<groupId>com.ericsson.nms</groupId>
+		<artifactId>integration</artifactId>
+		<version>15.2.0.40</version>
+	</parent>
+
+	<!--Please remember, this build will work only in linux environment. -->
+
+	<groupId>com.ericsson.oss.services</groupId>
+	<artifactId>operations-procedure-support-parser</artifactId>
+	<version>1.15.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>[${project.artifactId}] Project root</name>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<ericsson.scm.url>scm:git:[fetch=]ssh://gerritmirror.lmera.ericsson.se:29418/OSS/ENM-Parent/SQ-Gate/com.ericsson.oss.services/operations-procedure-support-parser[push=]ssh://gerrit.ericsson.se:29418/OSS/ENM-Parent/SQ-Gate/com.ericsson.oss.services/operations-procedure-support-parser</ericsson.scm.url>
+	</properties>
+
+	<!--Profile to deploy latest site -->
+	<profiles>
+		<profile>
+			<id>site_latest</id>
+			<distributionManagement>
+				<site>
+					<id>site</id>
+					<name>Site</name>
+					<url>${site.url}/operations-procedure-support-parser/latest</url>
+				</site>
+			</distributionManagement>
+		</profile>
+
+		<!--Profile to stage site for review -->
+		<profile>
+			<id>site_review</id>
+			<distributionManagement>
+				<site>
+					<id>site</id>
+					<name>Site</name>
+					<url>${site.url}</url>
+				</site>
+			</distributionManagement>
+		</profile>
+		<profile>
+			<id>container_prebuild</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>exec-maven-plugin</artifactId>
+						<groupId>org.codehaus.mojo</groupId>
+						<executions>
+							<execution>
+								<id>Prepare containers for the build</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>./prepare_build.sh</executable>
+								</configuration>
+							</execution>
+						</executions>
+						<inherited>false</inherited>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>rhel7</id>
+			<modules>
+				<module>ops-parser-lib</module>
+				<module>ops-enm-parser</module>
+				<module>ERICopsparser_CXP9042171</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>sles15</id>
+			<modules>
+				<module>ops-parser-lib</module>
+				<module>ops-enm-parser</module>
+				<module>ERICopsparsercenm_CXP9042345</module>
+			</modules>
+		</profile>
+	</profiles>
+	<!--Deployment of versioned documentation -->
+	<build>
+		<!-- used only to enable the packaging type: rpm -->
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>rpm-maven-plugin</artifactId>
+				<extensions>true</extensions>
+				<goals>
+					<goal>rpm</goal>
+				</goals>
+				<executions>
+					<execution>
+						<id>default-rpm</id>
+						<phase>none</phase>
+						<configuration>
+							<group>ERI-NMS</group>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+
+		<pluginManagement>
+			<plugins>
+				<!-- to avoid deploying this parent pom.xml to nexus -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<configuration>
+						<skip>true</skip>
+					</configuration>
+					<inherited>false</inherited>
+				<!-- 	<version>${deploy.plugin.version}</version> -->
+				</plugin>
+
+				<!-- configure required plugins for all stages of the build -->
+				<plugin>
+					<artifactId>exec-maven-plugin</artifactId>
+					<groupId>org.codehaus.mojo</groupId>
+					<!-- <version>${exec.plugin.version}</version> -->
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>rpm-maven-plugin</artifactId>
+					<!-- <version>${rpm.plugin.version}</version> -->
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+	<distributionManagement>
+		<site>
+			<id>site</id>
+			<name>Site</name>
+			<url>${site.url}/ops-parser/${project.parent.version}</url>
+		</site>
+	</distributionManagement>
+
+	<scm>
+		<developerConnection>${ericsson.scm.url}</developerConnection>
+		<connection>${ericsson.scm.url}</connection>
+		<tag>ops-parser-1.11.10</tag>
+	</scm>
+
+</project>

@@ -1,0 +1,138 @@
+<project name="ops-enm-parser" basedir="../../../">
+
+<property name="root.dir" location=".." />
+<property file="src/main/resources/build.properties" />
+
+<target name="compileCpp" description="This is used to compile ops-enm-parser directory">
+
+	<echo>Compiling cpp files...</echo>
+        <mkdir dir="${target.dir}" />
+        <taskdef classpath="${common.tasks}" resource="cpptasks.tasks" />
+        <cc name="${CC}" warnings="none" debug="no" multithreaded="yes" outtype="${link}" outfile="${outfile}" objdir="${target.dir}">
+
+            <fileset dir="src/main/cpp/cri" includes="*.C" />
+            <fileset dir="src/main/cpp/parse" includes="*.C" />
+            <fileset dir="${project.build.directory}/ll" includes="*.C" />
+            <fileset dir="${project.build.directory}/yy" includes="*.C" />
+            <fileset dir="src/main/cpp/iow" includes="*.C" />
+            <fileset dir="src/main/cpp/ui" includes="*.C" />
+            <fileset dir="src/main/cpp/servermain" includes="*.C" />
+
+            <includepath location="src/main/cpp/parse" />
+            <includepath location="src/main/cpp/cri" />
+            <includepath location="src/main/cpp/iow" />
+            <includepath location="src/main/cpp/ui" />
+            <includepath location="src/main/cpp/servermain" />
+
+            <includepath location="${project.build.directory}/ops_server/src" />
+            <includepath location="${project.build.directory}/yy" />
+            <includepath location="src/main/cpp/parse_lex_yacc" />
+            <includepath location="${parser.lib.dir}/src/main/cpp/subsc" />
+            <includepath location="${parser.lib.dir}/src/main/cpp/ttcb" />
+            <includepath location="${parser.lib.dir}/src/main/cpp/sched" />
+            <includepath location="${parser.lib.dir}/src/main/cpp/cmd" />
+            <includepath location="${parser.lib.dir}/src/main/cpp/common" />
+            <includepath location="${parser.lib.dir}/src/main/cpp/route" />
+
+            <!-- 3pp dependencies -->
+            <includepath location="${sourcepro.path}" />
+            <includepath location="${vbroker.include.dir}" />
+            <includepath location="${vbroker.lib.dir}" />
+            <includepath location="${grpc.include.dir}" />
+            <includepath location="${grpc.src.dir}" />
+            <includepath location="${vbroker.include.stubs.dir}" />
+            <includepath location="${parser.logs.include.dir}"/>
+
+            <!-- Compiler Arguments -->
+            <compilerarg location="start" value="-s" />
+            <compilerarg location="start" value="-v" />
+            <compilerarg location="start" value="-lpthread" />
+            <compilerarg location="start" value="-D_RWCONFIG=12dgmsd" />
+            <compilerarg location="start" value="-std=c++0x" />
+            <compilerarg location="start" value="-std=gnu++0x" />
+            <compilerarg location="start" value="-g" />
+            <compilerarg location="start" value="-m64" />
+            <compilerarg location="start" value="-W" />
+            <compilerarg location="start" value="-pthread" />
+            <compilerarg location="start" value="-Wno-long-long" />
+            <compilerarg location="start" value="-Wall" />
+            <compilerarg location="start" value="-msse3" />
+            <compilerarg location="start" value="-O0" />
+            <compilerarg location="start" value="-xc++" />
+            <compilerarg location="start" value="-DBOOST_LOG_DYN_LINK" />
+            <compilerarg location="start" value="-Dgtest_disable_pthreads=OFF" />
+
+            <!-- Linker Arguments -->
+            <linkerarg value="-m64"/>
+            <linkerarg value="-lrt"/>
+            <linkerarg value="-L${parser.lib.dir}/target"/>
+            <linkerarg value="-L${project.build.directory}/ops_server"/>
+            <linkerarg value="-L${project.build.directory}"/>
+            <linkerarg value="-L${sourcepro.lib.dir}"/>
+            <linkerarg value="-L${vbroker.lib.dir}"/>
+            <linkerarg value="-rpath-link,${vbroker.lib.dir}"/>
+            <linkerarg value="-L${grpc.libs.dir}"/>
+            <linkerarg value="-L${grpc.protobuf.dir}"/>
+            <linkerarg value="-L${grpc.proto.dir}"/>
+            <linkerarg value="-rpath-link,${grpc.libs.dir}"/>
+            <linkerarg value="-rpath-link,${parser.logs.lib.dir}"/>
+            <linkerarg value="-L${parser.logs.lib.dir}"/>
+            <libset libs="tls21012d-gmsd,nsl,its_support64,vport64_r,vdlog64_r,orb64_r,dl,pthread,
+                          crypt,cosnm64_r,opsparser,opss,grpc,grpc++,grpc++_reflection,protobuf,winfiol,boost_log_setup,boost_log,boost_thread,boost_system,boost_date_time,boost_filesystem,boost_regex,stdc++"/>
+
+
+            <defineset>
+                <define name="_REENTRANT" value="" />
+                <define name="TPF" value="400" />
+                <define name="THREAD" value="" />
+                <define name="PTHREAD" value=""/>
+                <define name="BITS64" value=""/>
+                <define name="_GNU_SOURCE" value=""/>
+            </defineset>
+        </cc>
+
+</target>
+
+<target name="compileLexYacc" description="This is used to compile Lex files of parser directory">
+
+        <mkdir dir="${project.build.directory}/ll" />
+
+        <exec executable="${flex.bin}" output="${project.build.directory}/ll/OZT_Parser_ll.C" error="${project.build.directory}/ll/error.log">
+              <arg line="-t" />
+              <arg line="${parse_lex_yacc.src.dir}/OZT_lex.ll" />
+        </exec>
+
+        <mkdir dir="${project.build.directory}/yy" />
+
+        <exec executable="${yacc.bin}" error="${project.build.directory}/yy/error.log">
+              <arg line="-d" />
+              <arg line="${parse_lex_yacc.src.dir}/OZT_Parser.yy" />
+        </exec>
+
+        <move file="OZT_Parser.tab.cc" tofile="${project.build.directory}/yy/OZT_Parser_yy.C" />
+        <delete file="OZT_Parser.tab.hh"/>
+
+</target>
+
+<target name="gencat">
+	     <mkdir dir="${gencat.target}" />
+	     <apply executable="${gencat.bin}" dest="${gencat.target}" parallel="false">
+	           <targetfile />
+	           <srcfile />
+	           <fileset dir="${gencat.basedir}" includes="**/*.nls" />
+	           <mapper type="glob" from="*.nls" to="*.cat" />
+	     </apply>
+</target>
+
+<target name="packageCpp" depends="compileLexYacc, gencat, compileCpp" description="This is used to generate compressed file to deploy">
+
+	     <tar compression="gzip" destfile="${project.build.directory}/ops_parser.tar.gz">
+
+	        <tarfileset dir="${project.build.directory}">
+	            <include name="ops_parser" />
+	        </tarfileset>
+	     </tar>
+
+</target>
+
+</project>

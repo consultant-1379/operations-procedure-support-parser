@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.ericsson.oss.services</groupId>
+		<artifactId>operations-procedure-support-parser</artifactId>
+		<version>1.15.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>ops-parser-lib</artifactId>
+	<name>[${project.artifactId}] module</name>
+
+	<properties>
+		<media.category>scripting</media.category>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.microfocus.visibroker</groupId>
+			<artifactId>visibroker-8.5-sp8-dist-tar</artifactId>
+			<version>8.5.sp8</version>
+			<type>tar.gz</type>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.gmock</groupId>
+			<artifactId>release-1.6.0_gmock</artifactId>
+			<version>1.6.0</version>
+			<type>tar.gz</type>
+			<scope>system</scope>
+			<systemPath>${pom.basedir}/lib/release-1.6.0_gmock.tar.gz</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>com.google.gtest</groupId>
+			<artifactId>release-1.6.0_gtest</artifactId>
+			<version>1.6.0</version>
+			<type>tar.gz</type>
+			<scope>system</scope>
+			<systemPath>${pom.basedir}/lib/release-1.6.0_gtest.tar.gz</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>ant-contrib</groupId>
+			<artifactId>cpptasks</artifactId>
+			<version>20030309.134440</version>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>local_build</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<version>2.10</version>
+						<executions>
+							<!-- This plugin is used to unpack visibroker bundle -->
+							<execution>
+								<id>unpack-visibroker</id>
+								<phase>validate</phase>
+								<goals>
+									<goal>unpack-dependencies</goal>
+								</goals>
+								<configuration>
+									<includeTypes>tar.gz</includeTypes>
+									<includeArtifactIds>visibroker-8.5-sp8-dist-tar</includeArtifactIds>
+									<outputDirectory>${project.build.directory}/visibroker</outputDirectory>
+								</configuration>
+							</execution>
+
+							<!-- This plugin is used to unpack gmock and gtest bundle -->
+							<execution>
+								<id>unpack-gmock</id>
+								<phase>validate</phase>
+								<goals>
+									<goal>unpack-dependencies</goal>
+								</goals>
+								<configuration>
+									<includeTypes>tar.gz</includeTypes>
+									<includeArtifactIds>release-1.6.0_gmock</includeArtifactIds>
+									<outputDirectory>${project.build.directory}</outputDirectory>
+								</configuration>
+							</execution>
+							<execution>
+								<id>unpack-gtest</id>
+								<phase>validate</phase>
+								<goals>
+									<goal>unpack-dependencies</goal>
+								</goals>
+								<configuration>
+									<includeTypes>tar.gz</includeTypes>
+									<includeArtifactIds>release-1.6.0_gtest</includeArtifactIds>
+									<outputDirectory>${project.build.directory}</outputDirectory>
+								</configuration>
+							</execution>
+							<!-- Copy jars to lib directory -->
+							<execution>
+								<id>copy-jars</id>
+								<phase>validate</phase>
+								<goals>
+									<goal>copy-dependencies</goal>
+								</goals>
+								<configuration>
+									<includeArtifactIds>cpptasks</includeArtifactIds>
+									<outputDirectory>${project.build.directory}/lib</outputDirectory>
+									<overwrite>true</overwrite>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+
+					<!-- This plugin is used to compile cpp files -->
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.7</version>
+						<inherited>false</inherited>
+						<executions>
+							<execution>
+								<id>compileCpp</id>
+								<phase>generate-sources</phase>
+								<configuration>
+									<target>
+										<ant antfile="src/main/resources/build.xml" target="compileCpp" />
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<!-- to avoid deploying this parent pom.xml to nexus -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<configuration>
+						<skip>true</skip>
+					</configuration>
+					<inherited>false</inherited>
+				<!-- 	<version>${deploy.plugin.version}</version> -->
+				</plugin>
+
+				<!-- configure required plugins for all stages of the build -->
+				<plugin>
+					<artifactId>exec-maven-plugin</artifactId>
+					<groupId>org.codehaus.mojo</groupId>
+					<!-- <version>${exec.plugin.version}</version> -->
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>rpm-maven-plugin</artifactId>
+					<!-- <version>${rpm.plugin.version}</version> -->
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+</project>
